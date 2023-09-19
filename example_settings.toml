@@ -1,0 +1,15 @@
+# [project_name.tlmdb]
+# is_main_obc = true
+# is_c2a_enable = true
+# prefix = "SAMPLE_MOBC_TLM_DB_"
+# path = "relative/tlm_db/directory/path/from/here"
+# dest_path = "relative/tlm_db/dest/directory/path/from/here"
+# max_tlm_num = 432
+
+[c2a_mobc_minimum.tlmdb]
+is_main_obc = true
+is_c2a_enable = true
+prefix = "SAMPLE_MOBC_TLM_DB_"                                                                        # TLM_DB/*.csvのprefix
+path = "sils/FlightSW/c2a_mobc_minimum/src/src_user/Settings/TlmCmd/DataBase/TLM_DB"                  # ここからTLM_DBまでの相対パス
+dest_path = "sils/FlightSW/c2a_mobc_minimum/src/src_user/Settings/TlmCmd/DataBase/TLM_DB/calced_data" # ここからTLM_DB/calced_dataまでの相対パス
+max_tlm_num = 432
