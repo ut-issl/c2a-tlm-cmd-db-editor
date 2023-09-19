@@ -1,6 +1,7 @@
 import csv
 import os
 import sys
+import typing
 from pathlib import Path
 
 import pandas as pd
@@ -47,7 +48,7 @@ num_start_line = 8
 
 
 @st.cache_data
-def load_settings():
+def load_settings() -> tuple[Path, dict]:
     path_base = next(
         (
             p
@@ -68,8 +69,8 @@ def load_settings():
 
 
 @st.cache_data
-def extract_data(csv_path, settings):
-    data = {}
+def extract_data(csv_path: Path, settings: dict) -> dict:
+    data = {"path": Path(), "name": "", "data": pd.DataFrame()}
     with open(csv_path, "r", errors="ignore") as csv_file:
         data["path"] = csv_path
         data["name"] = csv_path.stem.replace(f'{settings["prefix"]}', "")
@@ -82,6 +83,7 @@ def extract_data(csv_path, settings):
         bitlen_pre = 0
         bitlen_pre_init = True
         for index, row in df.iterrows():
+            index = typing.cast(int, index)
             if row["VarType"] == "||":
                 if bitlen_pre_init:
                     df.at[index - 1, "BitLen"] = bitlen_pre
@@ -108,7 +110,7 @@ def extract_data(csv_path, settings):
     return data
 
 
-def make_header(df):
+def make_header(df: pd.DataFrame) -> list[object]:
     header = [
         ["", "Target", df.loc[0, "Target"], "Local Var", df.loc[0, "Local Var"], "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "PacketID", df.loc[0, "PacketID"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -160,7 +162,7 @@ def make_header(df):
     return header
 
 
-def export(df, data, settings):
+def export(df: pd.DataFrame, data: dict, settings: dict) -> None:
     save(df, data, settings)
     data_to_write = make_header(df)
     for index, row in data["data"].iterrows():
@@ -205,7 +207,7 @@ def export(df, data, settings):
             csv_file.write(",".join(map(str, row)) + "\n")
 
 
-def save(df, data, settings):
+def save(df: pd.DataFrame, data: dict, settings: dict) -> None:
     data_to_write = make_header(df)
     for index, row in data["data"].iterrows():
         if index == 0:
@@ -216,8 +218,8 @@ def save(df, data, settings):
                     row["VarType"],
                     row["VarOrFunc"],
                     row["ExtType"],
-                    0,
-                    0,
+                    "0",
+                    "0",
                     row["BitLen"],
                     row["ConvType"],
                     "",
@@ -280,13 +282,13 @@ def save(df, data, settings):
 
 
 @st.cache_data
-def process_csv_files(settings):
+def process_csv_files(settings: dict) -> list[dict]:
     csv_path_list = get_csv_paths(settings)
     return [extract_data(csv_path, settings) for csv_path in csv_path_list]
 
 
 @st.cache_data
-def get_csv_paths(settings):
+def get_csv_paths(settings: dict) -> list[Path]:
     db_prefix = settings["prefix"]
     p = Path(settings["path"])
     p_list = list(p.glob("*.csv"))
@@ -296,7 +298,7 @@ def get_csv_paths(settings):
 
 
 @st.cache_data
-def calc_data(df):
+def calc_data(df: pd.DataFrame) -> pd.DataFrame:
     cumsum = df["BitLen"].astype(int)[:-1].cumsum().tolist()
     octpos = [_ // 8 for _ in cumsum]
     bitpos = [_ % 8 for _ in cumsum]
