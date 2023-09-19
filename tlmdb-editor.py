@@ -243,6 +243,7 @@ def calc_data(df):
 
 path_base, settings = load_settings()
 sections = list(settings.keys())
+sections = [key for key in sections if "tlmdb" in settings[key]]
 selected_project = None
 if "selected_project" not in st.session_state:
     st.session_state.selected_project = None
