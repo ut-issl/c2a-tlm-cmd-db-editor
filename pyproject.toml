@@ -13,9 +13,38 @@ build-backend = "hatchling.build"
 
 [tool.rye]
 managed = true
+dev-dependencies = [
+    "black>=23.9.1",
+    "isort>=5.12.0",
+    "pyproject-flake8>=5.0.4.post1",
+    "mypy>=1.5.1",
+    "pandas-stubs>=2.0.3.230814",
+    "types-toml>=0.10.8.7",
+]
+
+
+[tool.black]
+line-length = 150
+
+[tool.isort]
+line_length = 150
+multi_line_output = 3
+include_trailing_comma = true
+use_parentheses = true
+
+[tool.flake8]
+max-line-length = 150
+ignore = ["E203", "E501", "W503", "W504"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.rye.scripts]
-"editor" = { cmd = "streamlit run tlmdb-editor.py" }
+editor = { cmd = "streamlit run src/tlmdb-editor.py" }
+format = { chain = ["black src", "isort src"] }
+lint = { chain = [
+    "black --check src",
+    "isort -c -v src",
+    "pflake8 src",
+    "mypy src",
+] }
