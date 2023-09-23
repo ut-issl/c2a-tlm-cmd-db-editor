@@ -3,4 +3,4 @@ target
 .env
 site
 __pycache__
-settings.toml
+tlmdb_editor_config.toml

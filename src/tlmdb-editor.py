@@ -58,13 +58,13 @@ def load_settings() -> tuple[Path, dict]:
                 Path(__file__).parent.parent.parent,
                 Path(__file__).parent.parent.parent.parent,
             ]
-            if (p / "settings.toml").is_file()
+            if (p / "tlmdb_editor_config.toml").is_file()
         ),
         None,
     )
     if path_base is None:
-        raise FileNotFoundError("settings.toml is not found.")
-    settings = toml.load(path_base / "settings.toml")
+        raise FileNotFoundError("tlmdb_editor_config.toml is not found.")
+    settings = toml.load(path_base / "tlmdb_editor_config.toml")
     return path_base, settings
 
 
@@ -78,7 +78,8 @@ def extract_data(csv_path: Path, settings: dict) -> dict:
         data.update({rows[i][1]: rows[i][2] for i in range(4)})
         data[rows[0][3]] = rows[1][3]
         rows = rows[num_start_line:]
-        df = pd.DataFrame([{dict_index[i]: col for i, col in enumerate(row) if i in dict_index} for row in rows if row[1]])
+        df = pd.DataFrame([{dict_index[i]: col for i, col in enumerate(row) if i in dict_index}
+                          for row in rows if row[1]])
 
         bitlen_pre = 0
         bitlen_pre_init = True
@@ -100,7 +101,8 @@ def extract_data(csv_path: Path, settings: dict) -> dict:
                     df.at[index, "ConvInfo"] = df.at[index, "ConvInfo"][:-1]
 
         df["VarType"] = df["VarType"].astype(
-            pd.CategoricalDtype(["||", "int8_t", "int16_t", "int32_t", "uint8_t", "uint16_t", "uint32_t", "float", "double"])
+            pd.CategoricalDtype(["||", "int8_t", "int16_t", "int32_t", "uint8_t",
+                                "uint16_t", "uint32_t", "float", "double"])
         )
         df["ExtType"] = df["ExtType"].astype(pd.CategoricalDtype(["PACKET", "TC_FRAME"]))
         df["BitLen"] = df["BitLen"].astype(int)
@@ -112,7 +114,8 @@ def extract_data(csv_path: Path, settings: dict) -> dict:
 
 def make_header(df: pd.DataFrame) -> list[object]:
     header = [
-        ["", "Target", df.loc[0, "Target"], "Local Var", df.loc[0, "Local Var"], "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "Target", df.loc[0, "Target"], "Local Var", df.loc[0, "Local Var"],
+            "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "PacketID", df.loc[0, "PacketID"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "Enable/Disable", df.loc[0, "Enable/Disable"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "IsRestricted", df.loc[0, "IsRestricted"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -157,7 +160,8 @@ def make_header(df: pd.DataFrame) -> list[object]:
             "",
             "",
         ],
-        ["", "", "", "", "", "Octet%%##Pos.", "bit%%##Pos.", "bit%%##Len.", "", "a0", "a1", "a2", "a3", "a4", "a5", "", "", ""],
+        ["", "", "", "", "", "Octet%%##Pos.", "bit%%##Pos.", "bit%%##Len.",
+            "", "a0", "a1", "a2", "a3", "a4", "a5", "", "", ""],
     ]
     return header
 
@@ -305,7 +309,8 @@ def calc_data(df: pd.DataFrame) -> pd.DataFrame:
     df["OctPos"] = [0] + octpos
     df["BitPos"] = [0] + bitpos
     df = df.reindex(
-        columns=["Comment", "Name", "VarType", "VarOrFunc", "ExtType", "OctPos", "BitPos", "BitLen", "ConvType", "ConvInfo", "Description", "Note"]
+        columns=["Comment", "Name", "VarType", "VarOrFunc", "ExtType", "OctPos",
+                 "BitPos", "BitLen", "ConvType", "ConvInfo", "Description", "Note"]
     )
     return df
 
@@ -322,6 +327,9 @@ if "selected_project" not in st.session_state:
 
 if len(sys.argv) > 1 and sys.argv[1] in sections:
     st.session_state.selected_project = sys.argv[1]
+    selected_project = st.session_state.selected_project
+elif len(sections) == 1:
+    st.session_state.selected_project = sections[0]
     selected_project = st.session_state.selected_project
 elif st.session_state.selected_project:
     selected_project = st.session_state.selected_project
