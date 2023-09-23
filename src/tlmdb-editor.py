@@ -48,7 +48,7 @@ num_start_line = 8
 
 
 @st.cache_data
-def load_settings() -> tuple[Path, dict]:
+def load_settings():
     path_base = next(
         (
             p
@@ -69,7 +69,7 @@ def load_settings() -> tuple[Path, dict]:
 
 
 @st.cache_data
-def extract_data(csv_path: Path, settings: dict) -> dict:
+def extract_data(csv_path: Path, settings: dict):
     data = {"path": Path(), "name": "", "data": pd.DataFrame()}
     with open(csv_path, "r", errors="ignore") as csv_file:
         data["path"] = csv_path
@@ -112,11 +112,11 @@ def extract_data(csv_path: Path, settings: dict) -> dict:
     return data
 
 
-def make_header(df: pd.DataFrame) -> list[object]:
+def make_header(df: pd.DataFrame):
     header = [
-        ["", "Target", df.loc[0, "Target"], "Local Var", df.loc[0, "Local Var"],
+        ["", "Target", df.loc[0, "Target"], "Local Var", "",
             "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "PacketID", df.loc[0, "PacketID"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "PacketID", df.loc[0, "PacketID"], df.loc[0, "Local Var"], "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "Enable/Disable", df.loc[0, "Enable/Disable"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "IsRestricted", df.loc[0, "IsRestricted"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -286,13 +286,13 @@ def save(df: pd.DataFrame, data: dict, settings: dict) -> None:
 
 
 @st.cache_data
-def process_csv_files(settings: dict) -> list[dict]:
+def process_csv_files(settings: dict):
     csv_path_list = get_csv_paths(settings)
     return [extract_data(csv_path, settings) for csv_path in csv_path_list]
 
 
 @st.cache_data
-def get_csv_paths(settings: dict) -> list[Path]:
+def get_csv_paths(settings: dict):
     db_prefix = settings["prefix"]
     p = Path(settings["path"])
     p_list = list(p.glob("*.csv"))
