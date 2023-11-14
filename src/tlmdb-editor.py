@@ -63,8 +63,25 @@ def load_settings():
         None,
     )
     if path_base is None:
-        raise FileNotFoundError("tlm_cmd_db_editor_config.toml is not found.")
-    settings = toml.load(path_base / "tlm_cmd_db_editor_config.toml")
+        path_base = next(
+            (
+                p
+                for p in [
+                    Path(__file__).parent,
+                    Path(__file__).parent.parent,
+                    Path(__file__).parent.parent.parent,
+                    Path(__file__).parent.parent.parent.parent,
+                ]
+                if (p / "settings.toml").is_file()
+            ),
+            None,
+        )
+    else:
+        settings = toml.load(path_base / "tlm_cmd_db_editor_config.toml")
+    if path_base is None:
+        raise FileNotFoundError("settings.toml / tlm_cmd_db_editor_config.toml is not found.")
+    else:
+        settings = toml.load(path_base / "settings.toml")
     return path_base, settings
 
 

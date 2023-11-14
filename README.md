@@ -1,4 +1,4 @@
-# tlmdb-editor
+# tlm-cmd-db-editor
 
 ## 準備
 
