@@ -3,5 +3,5 @@ target
 .env
 site
 __pycache__
-tlmdb_editor_config.toml
+tlm_cmd_db_editor_config.toml
 .python-version

@@ -58,13 +58,13 @@ def load_settings():
                 Path(__file__).parent.parent.parent,
                 Path(__file__).parent.parent.parent.parent,
             ]
-            if (p / "tlmdb_editor_config.toml").is_file()
+            if (p / "tlm_cmd_db_editor_config.toml").is_file()
         ),
         None,
     )
     if path_base is None:
-        raise FileNotFoundError("tlmdb_editor_config.toml is not found.")
-    settings = toml.load(path_base / "tlmdb_editor_config.toml")
+        raise FileNotFoundError("tlm_cmd_db_editor_config.toml is not found.")
+    settings = toml.load(path_base / "tlm_cmd_db_editor_config.toml")
     return path_base, settings
 
 
@@ -116,7 +116,8 @@ def make_header(df: pd.DataFrame):
     header = [
         ["", "Target", df.loc[0, "Target"], "Local Var", "",
             "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "PacketID", df.loc[0, "PacketID"], df.loc[0, "Local Var"], "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "PacketID", df.loc[0, "PacketID"], df.loc[0, "Local Var"],
+            "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "Enable/Disable", df.loc[0, "Enable/Disable"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "IsRestricted", df.loc[0, "IsRestricted"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
