@@ -4,4 +4,5 @@ target
 site
 __pycache__
 tlm_cmd_db_editor_config.toml
+settings.toml
 .python-version
