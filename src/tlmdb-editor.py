@@ -11,6 +11,17 @@ import toml
 
 st.set_page_config(layout="wide")
 st.title("TLM DB")
+st.markdown(
+    """
+<style>
+button:not([title="View fullscreen"]) {
+    height: auto;
+    width: 100% !important;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 # グローバル変数の定義
 dict_index = {
