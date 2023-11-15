@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import sys
 import typing
@@ -59,11 +60,11 @@ def find_settings_file():
 @st.cache_data
 def load_settings():
     settings_file = find_settings_file()
-    settings = toml.load(settings_file)
+    settings = json.loads(json.dumps(toml.load(settings_file)))
     return settings_file.parent, settings
 
 
-@st.cache_data
+@ st.cache_data
 def extract_data(csv_path: Path, settings: dict):
     data = {"path": Path(), "name": "", "data": pd.DataFrame()}
     with open(csv_path, "r", errors="ignore") as csv_file:
@@ -74,7 +75,7 @@ def extract_data(csv_path: Path, settings: dict):
         data[rows[0][3]] = rows[1][3]
         rows = rows[num_start_line:]
         df = pd.DataFrame([{dict_index[i]: col for i, col in enumerate(row) if i in dict_index}
-                          for row in rows if row[1]])
+                           for row in rows if row[1]])
 
         bitlen_pre = 0
         bitlen_pre_init = True
@@ -281,13 +282,13 @@ def save(df: pd.DataFrame, data: dict, settings: dict) -> None:
             csv_file.write(",".join(map(str, row)) + "\n")
 
 
-@st.cache_data
+@ st.cache_data
 def process_csv_files(settings: dict):
     csv_path_list = get_csv_paths(settings)
     return [extract_data(csv_path, settings) for csv_path in csv_path_list]
 
 
-@st.cache_data
+@ st.cache_data
 def get_csv_paths(settings: dict):
     db_prefix = settings["prefix"]
     p = Path(settings["path"])
@@ -297,7 +298,7 @@ def get_csv_paths(settings: dict):
     return p_list
 
 
-@st.cache_data
+@ st.cache_data
 def calc_data(df: pd.DataFrame) -> pd.DataFrame:
     cumsum = df["BitLen"].astype(int)[:-1].cumsum().tolist()
     octpos = [_ // 8 for _ in cumsum]

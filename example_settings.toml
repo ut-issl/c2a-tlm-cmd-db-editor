@@ -6,6 +6,11 @@
 # dest_path = "relative/tlm_db/dest/directory/path/from/here"
 # max_tlm_num = 432
 
+# [project_name.cmddb]
+# path_bct = "relative/cmd_db/bct.csv/path/from/here"
+# path_cmd_db = "relative/cmd_db/cmd_db.csv/path/from/here"
+# allocation = "allocation/of/cmd"
+
 [c2a_mobc_minimum.tlmdb]
 is_main_obc = true
 is_c2a_enable = true
@@ -13,3 +18,8 @@ prefix = "SAMPLE_MOBC_TLM_DB_"                                                  
 path = "sils/FlightSW/c2a_mobc_minimum/src/src_user/Settings/TlmCmd/DataBase/TLM_DB"                  # ここからTLM_DBまでの相対パス
 dest_path = "sils/FlightSW/c2a_mobc_minimum/src/src_user/Settings/TlmCmd/DataBase/TLM_DB/calced_data" # ここからTLM_DB/calced_dataまでの相対パス
 max_tlm_num = 432
+
+[c2a_mobc_minimum.cmddb]
+path_bct = "sils/FlightSW/c2a_mobc_minimum/src/src_user/Settings/TlmCmd/DataBase/CMD_DB/SAMPLE_MOBC_CMD_DB_BCT.csv"
+path_cmd_db = "sils/FlightSW/c2a_mobc_minimum/src/src_user/Settings/TlmCmd/DataBase/CMD_DB/SAMPLE_MOBC_CMD_DB_CMD_DB.csv"
+allocation = { "CORE" = 256, "CDH" = 256, "POWER" = 96, "COMM" = 64, "MISSION" = 128, "PROP" = 80, "AOCS" = 64, "THERMAL" = 32, "Trajectory" = 16, "HILS" = 16, "Other" = 16, "Margin" = 512 }

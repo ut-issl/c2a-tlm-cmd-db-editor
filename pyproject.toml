@@ -3,11 +3,7 @@ name = "tlmdb-editor"
 version = "0.1.0"
 description = "Add a short description here"
 authors = [{ name = "flap1", email = "sho1seto@gmail.com" }]
-dependencies = [
-    "streamlit>=1.23.1",
-    "toml>=0.10.2",
-    "pandas>=1.1.5",
-]
+dependencies = ["streamlit>=1.23.1", "toml>=0.10.2", "pandas>=1.1.5"]
 readme = "README.md"
 requires-python = ">= 3.7"
 
@@ -47,7 +43,8 @@ ignore = ["E203", "E501", "W503", "W504"]
 allow-direct-references = true
 
 [tool.rye.scripts]
-editor = { cmd = "streamlit run src/tlmdb-editor.py" }
+tlm = { cmd = "streamlit run src/tlmdb-editor.py" }
+cmd = { cmd = "streamlit run src/cmddb-editor.py" }
 format = { chain = ["black src", "isort src"] }
 lint = { chain = [
     "black --check src",
