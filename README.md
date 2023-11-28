@@ -13,5 +13,6 @@
 ```bash
 cd /path/to/this/directory
 rye sync
-rye run editor
+rye run tlm # tlm editor
+rye run cmd # cmd editor
 ```
